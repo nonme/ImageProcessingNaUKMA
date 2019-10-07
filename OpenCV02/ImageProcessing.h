@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <opencv2/opencv.hpp>
 class ImageProcessing {
 private:
@@ -42,4 +42,19 @@ public:
 	
 	*/
 	static void GaussianBlur(const cv::Mat& in_image, cv::Mat& out_image, int ksize, double sigma);
+	/*
+		Низькочастотні, або ж усереднюючі, або ж сглажувальні фільтри використовуються
+		для зменшення різьких переходів рівня яркості на зображенні. Таким чином, вони
+		використовуються для заглушення "несуттєвих деталей на зображенні", тобто такі
+		сукупності пікселей, які малі порівняно з розмірами маски фільтра.
+	*/
+	static void LowpassFilter(const cv::Mat& in_image, cv::Mat& out_image, int ksize);
+	/*
+		Median filter is a non-linear filter used to reduce noise.
+	*/
+	static void MedianFilter(const cv::Mat& in_image, cv::Mat& out_image, int ksize, double quantile = 0.5);
+	/*
+		Salt and pepper filter add noise to the image
+	*/
+	static void SaltAndPepperNoise(const cv::Mat& in_image, cv::Mat& out_image, int noise_percent);
 };
