@@ -39,6 +39,10 @@ public:
 	*/
 	static void convolution(const cv::Mat& in_image, cv::Mat& out_image, double mask[], int ksize, double coef);
 	/*
+		Convolution for separability
+	*/
+	static void convoluion(const cv::Mat& in_image, cv::Mat& out_image, double y_mask[], double x_mask[], int ksize, double coef);
+	/*
 	
 	*/
 	static void GaussianBlur(const cv::Mat& in_image, cv::Mat& out_image, int ksize, double sigma);
@@ -57,4 +61,8 @@ public:
 		Salt and pepper filter add noise to the image
 	*/
 	static void SaltAndPepperNoise(const cv::Mat& in_image, cv::Mat& out_image, int noise_percent);
-};
+	/*
+	
+	*/
+	static void SobelOperator(const cv::Mat& in_image, cv::Mat& out_image);
+}; 

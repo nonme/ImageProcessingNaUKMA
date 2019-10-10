@@ -30,6 +30,9 @@
     <ClCompile Include="Lab03.cpp">
       <Filter>Source Files\Labs</Filter>
     </ClCompile>
+    <ClCompile Include="Lab04.cpp">
+      <Filter>Source Files\Labs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ImageProcessing.h">

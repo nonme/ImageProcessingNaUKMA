@@ -4,7 +4,7 @@
 
 int main(int argc, char* argv[]) {
 	srand(time(0));
-	std::string image_path = "C:/Users/dmitr/source/repos/OpenCV02/images/einstein.png";
+	std::string image_path = "C:/Users/dmitr/source/repos/OpenCV02/images/bike.jpg";
 	cv::Mat image;
 	if (argc > 1)
 		image = cv::imread(argv[1], cv::IMREAD_GRAYSCALE);
@@ -127,6 +127,19 @@ int main(int argc, char* argv[]) {
 			cv::imshow("Salt and Pepper", out_image);
 			cv::imshow("Median Filter", out_image2);
 			cv::imshow("Gauss Filter", out_image3);
+			cv::waitKey(0);
+			break;
+		}
+		case 8: {
+			cv::Mat blurred(image.size(), image.type());
+			ImageProcessing::GaussianBlur(image, blurred, 5, 1);
+			cv::Mat out_image(image.size(), image.type());
+			ImageProcessing::SobelOperator(blurred, out_image);
+			cv::namedWindow("Original image", cv::WINDOW_AUTOSIZE);
+			cv::namedWindow("Sobel", cv::WINDOW_AUTOSIZE);
+
+			cv::imshow("Original image", image);
+			cv::imshow("Sobel", out_image);
 			cv::waitKey(0);
 			break;
 		}

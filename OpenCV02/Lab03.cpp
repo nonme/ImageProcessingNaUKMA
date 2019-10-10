@@ -2,12 +2,12 @@
 
 void ImageProcessing::convolution(const cv::Mat& in_image, cv::Mat& out_image, double mask[], int ksize, double coef) {
 	double sum(0.0);
-	for (int i = 0; i < in_image.rows; ++i) {
-		for (int j = 0; j < in_image.cols; ++j) {
+	for (int i = ksize / 2; i < in_image.rows - ksize / 2; ++i) {
+		for (int j = ksize / 2; j < in_image.cols - ksize / 2; ++j) {
 			sum = 0.0;
 			for (int a = 0; a < ksize; ++a) {
 				for (int b = 0; b < ksize; ++b) {
-					if (i + a - ksize / 2 >= 0 || j + b - ksize / 2 >= 0)
+					if (i + a - ksize / 2 >= 0 && j + b - ksize / 2 >= 0)
 						sum += (in_image.data[(i + a - ksize / 2) * in_image.cols + (j + b - ksize / 2)]) * mask[a * ksize + b];
 				}
 			}
@@ -15,6 +15,7 @@ void ImageProcessing::convolution(const cv::Mat& in_image, cv::Mat& out_image, d
 		}
 	}
 }
+
 void ImageProcessing::GaussianBlur(const cv::Mat& in_image, cv::Mat& out_image, int ksize, double sigma) {
 	/* Create mask array */
 	double* mask = new double[static_cast<int> (ksize * ksize)];
