@@ -142,7 +142,9 @@
     <ClCompile Include="Lab02.cpp" />
     <ClCompile Include="Lab03.cpp" />
     <ClCompile Include="Lab04.cpp" />
+    <ClCompile Include="Lab05.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ImageProcessing.h" />

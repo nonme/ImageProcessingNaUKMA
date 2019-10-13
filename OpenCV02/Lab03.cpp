@@ -11,7 +11,9 @@ void ImageProcessing::convolution(const cv::Mat& in_image, cv::Mat& out_image, d
 						sum += (in_image.data[(i + a - ksize / 2) * in_image.cols + (j + b - ksize / 2)]) * mask[a * ksize + b];
 				}
 			}
-			out_image.data[i * in_image.cols + j] = sum * coef;
+			sum *= coef;
+			sum = shrink(sum, 0, 255);
+			out_image.data[i * in_image.cols + j] = sum;
 		}
 	}
 }

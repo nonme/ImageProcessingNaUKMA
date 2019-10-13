@@ -4,6 +4,11 @@ class ImageProcessing {
 private:
 	static constexpr double PI = 3.14159265359;
 	static constexpr double E = 2.7182818284590452353602874713527;
+
+	/*
+		If val is lesser than left, returns left, if val is bigger than right returns right, else returns val
+	*/
+	static double shrink(double val, double left, double right);
 public:
 	/*
 		Decrease the size of image, size / N, where N is the natural number
@@ -64,5 +69,13 @@ public:
 	/*
 	
 	*/
-	static void SobelOperator(const cv::Mat& in_image, cv::Mat& out_image);
+	static double** SobelOperator(const cv::Mat& in_image, cv::Mat& out_image);
+	/*
+	
+	*/
+	static void CannyEdgeDetection(const cv::Mat& in_image, cv::Mat& out_image);
+	/*
+		Otsu's method to find threshold of the image
+	*/
+	static double OtsuThreshold(const cv::Mat& in_image);
 }; 

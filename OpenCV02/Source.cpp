@@ -4,7 +4,7 @@
 
 int main(int argc, char* argv[]) {
 	srand(time(0));
-	std::string image_path = "C:/Users/dmitr/source/repos/OpenCV02/images/bike.jpg";
+	std::string image_path = "C:/Users/dmitr/source/repos/OpenCV02/images/girl.png";
 	cv::Mat image;
 	if (argc > 1)
 		image = cv::imread(argv[1], cv::IMREAD_GRAYSCALE);
@@ -140,6 +140,14 @@ int main(int argc, char* argv[]) {
 
 			cv::imshow("Original image", image);
 			cv::imshow("Sobel", out_image);
+			cv::waitKey(0);
+			break;
+		}
+		case 9: {
+			cv::Mat out_image(image.size(), image.type());
+			ImageProcessing::CannyEdgeDetection(image, out_image);
+			cv::imshow("Original", image);
+			cv::imshow("Canny", out_image);
 			cv::waitKey(0);
 			break;
 		}

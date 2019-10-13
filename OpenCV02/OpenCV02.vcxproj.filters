@@ -33,6 +33,12 @@
     <ClCompile Include="Lab04.cpp">
       <Filter>Source Files\Labs</Filter>
     </ClCompile>
+    <ClCompile Include="Lab05.cpp">
+      <Filter>Source Files\Labs</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>Source Files\Labs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ImageProcessing.h">
