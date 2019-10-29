@@ -39,6 +39,12 @@
     <ClCompile Include="Util.cpp">
       <Filter>Source Files\Labs</Filter>
     </ClCompile>
+    <ClCompile Include="Lab06.cpp">
+      <Filter>Source Files\Labs</Filter>
+    </ClCompile>
+    <ClCompile Include="Lab07.cpp">
+      <Filter>Source Files\Labs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ImageProcessing.h">

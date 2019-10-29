@@ -9,6 +9,12 @@ private:
 		If val is lesser than left, returns left, if val is bigger than right returns right, else returns val
 	*/
 	static double shrink(double val, double left, double right);
+	static void recursiveHysteresis(cv::Mat& image, int low_threshold, int high_threshold, int i = 0, int j = 0, int length = 0);
+	static void arrayToMat(double** arr, cv::Mat& image, int rows, int cols);
+	static double normalize(double value, double local_value, double max_value);
+
+	static void delete2DArray(double** arr, int rows);
+	static double** new2DArray(int height, int width, int fillValue = -1);
 public:
 	/*
 		Decrease the size of image, size / N, where N is the natural number
@@ -42,11 +48,39 @@ public:
 	/*
 	
 	*/
+	static void LaplaceOperator(const cv::Mat& in_image, cv::Mat& out_image);
+	static void LaplaceOperator(const cv::Mat& in_image, double** result);
+	static void DiagonalLaplaceOperator(const cv::Mat& in_image, cv::Mat& out_image); //TODO
+	/*
+		
+	*/
+	static void ZeroCrossOperator(const cv::Mat& in_image, cv::Mat& out_image, int threshold = 15);
+	/*
+	
+	*/
+	static void RobertsOperator(const cv::Mat& in_image, cv::Mat& out_image);
+	/*
+
+	*/
+	static void PrewittOperator(const cv::Mat& in_image, cv::Mat& out_image);
+	/*
+		Function that add's pixels in in_image and pixels in applied_image and saves in out_image.
+	*/
+	static void apply(const cv::Mat& in_image, cv::Mat& applied_image, cv::Mat& out_image, double coef = 1);
+	/*
+		Convolution that returns cv::Mat as the output. Suitable for Gaussian filter and other filters
+		that have coefficient and produce only positive values. Otherwise, may cause overflow.
+	*/
 	static void convolution(const cv::Mat& in_image, cv::Mat& out_image, double mask[], int ksize, double coef);
+	/*
+		Convolution that returns double values of pixel. Useful for Sobel, Laplace and other filters that output
+		negative values.
+	*/
+	static void convolution(const cv::Mat& in_image, double** out_image, double mask[], int ksize, double coef);
 	/*
 		Convolution for separability
 	*/
-	static void convoluion(const cv::Mat& in_image, cv::Mat& out_image, double y_mask[], double x_mask[], int ksize, double coef);
+	static void convolution(const cv::Mat& in_image, cv::Mat& out_image, double x_mask[], double y_mask[], int ksize, double coef); //TODO
 	/*
 	
 	*/
@@ -70,12 +104,24 @@ public:
 	
 	*/
 	static double** SobelOperator(const cv::Mat& in_image, cv::Mat& out_image);
+	static double** ScharrOperator(const cv::Mat& in_image, cv::Mat& out_image);
 	/*
 	
 	*/
-	static void CannyEdgeDetection(const cv::Mat& in_image, cv::Mat& out_image);
+	static void CannyEdgeDetection(const cv::Mat& in_image, cv::Mat& out_image, int l_threshold = -1, int h_threshold = -1);
 	/*
 		Otsu's method to find threshold of the image
 	*/
 	static double OtsuThreshold(const cv::Mat& in_image);
+	
+	static void erosion(const cv::Mat& in_image, cv::Mat& out_image, double** struct_element, int h, int w, int type = BINARY);
+	static void dilation(const cv::Mat& in_image, cv::Mat& out_image, double** struct_element, int h, int w, int type = BINARY);
+	static void findBorder(const cv::Mat& in_image, cv::Mat& out_image);
+
+	static void opening(const cv::Mat& in_image, cv::Mat& out_image, double** struct_element, int h, int w);
+	static void closing(const cv::Mat& in_image, cv::Mat& out_image, double** struct_element, int h, int w);
+
+	enum {
+		BINARY, GRAYSCALE, COLOR
+	};
 }; 
