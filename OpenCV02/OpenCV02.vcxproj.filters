@@ -45,6 +45,21 @@
     <ClCompile Include="Lab07.cpp">
       <Filter>Source Files\Labs</Filter>
     </ClCompile>
+    <ClCompile Include="Lab08.cpp">
+      <Filter>Source Files\Labs</Filter>
+    </ClCompile>
+    <ClCompile Include="Lab09.cpp">
+      <Filter>Source Files\Labs</Filter>
+    </ClCompile>
+    <ClCompile Include="Lab10.cpp">
+      <Filter>Source Files\Labs</Filter>
+    </ClCompile>
+    <ClCompile Include="Harris.cpp">
+      <Filter>Source Files\Labs</Filter>
+    </ClCompile>
+    <ClCompile Include="Watershed.cpp">
+      <Filter>Source Files\Labs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ImageProcessing.h">

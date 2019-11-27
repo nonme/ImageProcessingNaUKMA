@@ -1,16 +1,18 @@
 ﻿#include <iostream>
 #include <opencv2/opencv.hpp>
+#include <stack>
+#include <utility>
 #include "ImageProcessing.h"
 void onlyCircles(cv::Mat image, cv::Mat out_image);
-
 int main(int argc, char* argv[]) {
 	srand(time(0));
-	std::string image_path = "images/im_kola.tif";
+	std::string image_path = "images/checkerboard.png";
 	cv::Mat image;
 	if (argc > 1)
 		image = cv::imread(argv[1], cv::IMREAD_GRAYSCALE);
 	else
 		image = cv::imread(image_path, cv::IMREAD_GRAYSCALE);
+	std::cout << image.type() << std::endl;
 	if (image.empty())
 		std::cout << "Failed to load the image.";
 	else {
@@ -31,6 +33,11 @@ int main(int argc, char* argv[]) {
 		std::cout << "12 - Prewitt, Scharr and Roberts operators" << std::endl;
 		std::cout << "13 - Zero cross operator" << std::endl;
 		std::cout << "14 - Circles" << std::endl;
+		std::cout << "15 - Triangle Algorithm" << std::endl;
+		std::cout << "16 - Optimal Threshold" << std::endl;
+		std::cout << "17 - Region growing" << std::endl;
+		std::cout << "18 - Region marking" << std::endl;
+		std::cout << "19 - Boundary Tracing" << std::endl;
 		std::cin >> input;
 		switch (input) {
 			case 0: {
@@ -221,17 +228,151 @@ int main(int argc, char* argv[]) {
 
 				cv::waitKey(0);
 			}
+			case 15: {
+				cv::Mat out_image(image.size(), image.type());
+				
+				int sz = 40;
+				double** s = new double*[sz];
+				for (int i = 0; i < sz; ++i) {
+					s[i] = new double[sz];
+					for (int j = 0; j < sz; ++j)
+						s[i][j] = 1;
+				}
+				ImageProcessing::dilation(image, out_image, s, sz, sz);
+
+				cv::imshow("Original", image);
+				cv::imshow("Dilation", out_image);
+				
+				cv::waitKey(0);
+			}
+				break;
+			case 16: {
+				cv::Mat out_image(image.size(), image.type());
+				cv::Mat out_image2(image.size(), image.type());
+
+				int threshold = ImageProcessing::OptimalThreshold(image);
+				int threshold2 = ImageProcessing::TriangleAlgorithm(image);
+
+				std::cout << threshold << " " << threshold2 << std::endl;
+
+				ImageProcessing::toBinary(image, out_image, threshold);
+				ImageProcessing::toBinary(image, out_image2, threshold2);
+
+				cv::imshow("Original", image);
+				cv::imshow("Optimal threshold", out_image);
+				//cv::imshow("Triangle (Zack) Algorithm", out_image2);
+
+				cv::waitKey(0);
+
+				break;
+			}
+			case 17: {
+				cv::Mat out_image(image.size(), image.type());
+				ImageProcessing::RegionGrowing(image, out_image, 255, 200, ImageProcessing::EIGHT_CONNECTED);
+
+				std::cout << ImageProcessing::OptimalThreshold(image) << std::endl;
+
+				cv::imshow("Original", image);
+				cv::imshow("Output", out_image);
+
+				cv::waitKey(0);
+
+				break;
+			}
+			case 18: {
+				cv::Mat out_image(image.size(), image.type());
+				ImageProcessing::RegionMarking(image, out_image, 25, ImageProcessing::EIGHT_CONNECTED);
+
+				cv::imshow("Original", image);
+				cv::imshow("Output", out_image);
+
+				cv::waitKey(0);
+
+				break;
+			}
+			case 19: {
+				cv::Mat out_image(image.size(), image.type());
+				cv::Mat out_image2(image.size(), image.type());
+				image.copyTo(out_image2);
+				std::vector<std::vector<cv::Point> > contours = ImageProcessing::TheoPavlidisAlgorithm(image);
+				
+				ImageProcessing::drawContours(out_image, contours);
+
+				cv::imshow("Original", out_image2);
+				cv::imshow("Contours", out_image);
+				
+				cv::waitKey(0);
+
+				break;
+			}
+			case 20: {
+				ImageProcessing::invertImage(image);
+
+				cv::Mat contour_image(image.size(), image.type());
+				cv::Mat out_image(cv::Size(800, 400), image.type());
+				std::vector<std::vector<cv::Point>> contours = ImageProcessing::TheoPavlidisAlgorithm(image);
+				ImageProcessing::drawContours(contour_image, contours);
+				cv::imshow("Contour", contour_image);
+				std::vector<double> plot = ImageProcessing::calculateCurvature(contours[0]);
+				ImageProcessing::plotCurvature(plot, out_image);
+				cv::imshow("Plot", out_image);
+				cv::waitKey(0);
+
+				break;
+			}
+			case 21: {
+				cv::Mat out_image(image.size(), image.type());
+
+				ImageProcessing::HarrisCornerDetector(image, out_image, 0.05, 3, 140, true);
+				
+				cv::imshow("Original", image);
+				cv::imshow("Output", out_image);
+				cv::waitKey(0);
+
+				break;
+			}
+			case 22: {
+				cv::Mat markers(image.size(), image.type());
+
+				cv::imshow("Original", image);
+
+				markers = ImageProcessing::findMarkers(image, true);
+
+				cv::imshow("Markers", markers);
+
+				cv::Mat out_image(image.size(), image.type());
+				image.copyTo(out_image);
+
+				ImageProcessing::watershed(image, out_image, markers);
+
+				cv::imshow("Watershed", out_image);
+				cv::waitKey(0);
+			}
 		}	
 	}
 }
 
 void onlyCircles(cv::Mat image, cv::Mat out_image) {
-	double** s1 = new double* [10];
-	for (int i = 0; i < 10; ++i)
-		s1[i] = new double[10] { 1, 1, 1 };
-	//ImageProcessing::erosion(image, out_image, s1, 10, 10);
-	//cv::imshow("1", out_image);
-	double** s2 = new double* [10];
+	int sz = 6;
+	double** s1 = new double* [sz];
+	for (int i = 0; i < sz; ++i) {
+		s1[i] = new double[sz];
+		for (int j = 0; j < sz; ++j)
+			s1[i][j] = 1;
+	}
+	
+	cv::Mat temp(out_image.size(), out_image.type());
+	ImageProcessing::opening(image, out_image, s1, sz, sz);
+	//ImageProcessing::opening(out_image, temp, s1, 3, 3);
+	//ImageProcessing::opening(temp, out_image, s1, 3, 3);
+
+	
+	//ImageProcessing::opening(image, out_image, s1, 5, 5);
+	//cv::Mat temp(image.size(), image.type());
+	//ImageProcessing::dilation(out_image, temp, s1, 3, 3);
+	//ImageProcessing::dilation(temp, out_image, s1, 3, 3);
+	//out_image = temp;
+	/*double** s2 = new double* [10];
 	for (int i = 0; i < 10; ++i)
 		s2[i] = new double[1]{ 1 };
 	ImageProcessing::erosion(image, out_image, s2, 10, 1);
@@ -252,7 +393,7 @@ void onlyCircles(cv::Mat image, cv::Mat out_image) {
 	ImageProcessing::dilation(out_image, second, s3, 1, 6);
 	ImageProcessing::dilation(second, out_image, s3, 1, 6);
 	ImageProcessing::dilation(out_image, second, s2, 10, 1);
-	ImageProcessing::dilation(second, out_image, s2, 10, 1);
+	ImageProcessing::dilation(second, out_image, s2, 10, 1);*/
 	/*double** s1 = new double* [4];
 	for (int i = 0; i < 4; ++i)
 		s1[i] = new double[4]{ 1, 1, 1, 1 };
